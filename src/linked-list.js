@@ -30,11 +30,17 @@ class LinkedList {
     }
 
     head() {
-        return this._head.data;
+        if (this._head)
+            return this._head.data;
+        else
+            return null;
     }
 
     tail() {
-        return this._tail.data;
+        if (this._tail)
+            return this._tail.data;
+        else
+            return null;
     }
 
     atNode(index) {
@@ -80,6 +86,7 @@ class LinkedList {
         while (this.length > 0) {
             this.deleteAt(0)
         } 
+        return this;
     }
 
     deleteAt(index) {
@@ -87,22 +94,45 @@ class LinkedList {
             return this;
         }
         let indexEl = this.atNode(index);
-        if (indexEl.prev)
+        if (indexEl.prev) {
             indexEl.prev.next = indexEl.next;
-        if (indexEl.next)
+        }
+        else {
+            this._head = this._head.next;
+        }
+        
+        if (indexEl.next) {
             indexEl.next.prev = indexEl.prev;
+        }
+        else {
+            this._tail = this._tail.prev;
+        }
+
         this.length--;
         indexEl = null;
         return this;
     }
 
-    reverse() {}
+    reverse() {
+        var temp = this._head;
+        var next;
+        while (temp !== null) {
+            next = temp.next;
+            var prevCopy = temp.prev;
+            temp.prev = temp.next;
+            temp.next = prevCopy;
+            temp = next;
+        }
+        temp = this._head;
+        this._head = this._tail;
+        this._tail = temp;
+        return this;
+    }
 
     indexOf(data) {
-        let temp = new Node();
-        temp = this._head;
+        let temp = this._head;
         let i = 0;
-        while(temp !== null) {
+        while (temp !== null) {
             if (temp.data == data) {
                 return i; 
             }
